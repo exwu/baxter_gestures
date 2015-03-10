@@ -3,7 +3,7 @@ from gesture_utils import *
 
 import sys
 
-init(['left'])
+init(['right'])
 
 
 # NOTES: 
@@ -12,33 +12,28 @@ init(['left'])
 	# y is towards baxter
 
 
-bowl_pos = Point(0.85, -0.09, 0.00)
-# 0.15 is a good distance. get points on a sphere, pick one?
 
-
-bowl_pos2 = Point(x=0.553891693671548, y=0.6621980379880802, z=0.032158606247587984)
-
-
-bowl_pos3 = Point(x=0.6706101699747452, y=0.4837439381806709, z=0.016091503067306695)
-
-bowl_pos4 = Point(x=0.6752933152172509, y=0.66478088155743593, z=-0.02631370211618276)
-
+bowl_pos5 = Point(x=0.7403782842323192, y=-0.5016241130334161, z=-0.028004569892429124) 
 
 
 def test_find_point(): 
 	print find_point_at_distance(0.15, Point(0, 0, 0), Point(2, 1, 1))
 
 def test_point_at(): 
-	baxter_point_at(bowl_pos4)
+	baxter_point_at(bowl_pos5)
 
 def test_point_emphatically(): 
-	baxter_point_emphatically_at(bowl_pos3, 1.0)
+	baxter_point_emph_and_back(bowl_pos5)
 
-def test_get_pose(): 
-	print get_pose()
+def test_get_ee_pose(): 
+	print get_ee_pose()
 
 def test_get_joint_angles(): 
 	print get_joint_angles()
+
+def test_move_to_neutral(): 
+	move_to_neutral()
+
 
 
 
@@ -47,8 +42,9 @@ def main():
 	tests = {'find_point' : test_find_point, 
 			'point_at' : test_point_at, 
 			'point_emph' : test_point_emphatically,
-			'get_pose' : test_get_pose,
+			'get_pose' : test_get_ee_pose,
 			'joint_angles' : test_get_joint_angles, 
+			'neutral': test_move_to_neutral,
 			}
 	tests[sys.argv[1]]()
 
