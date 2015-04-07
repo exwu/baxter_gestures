@@ -1,9 +1,9 @@
 #!/usr/bin/python
-from gesture_utils import * 
 
 import sys
+import gesture_utils as gu
 
-init(['right'])
+gu.init(['right'])
 
 
 # NOTES: 
@@ -17,9 +17,10 @@ bowl_pos5 = Point(x=0.7403782842323192, y=-0.5016241130334161, z=-0.028004569892
 
 
 def test_find_point(): 
-	print find_point_at_distance(0.15, Point(0, 0, 0), Point(2, 1, 1))
+	print gu.find_point_at_distance(0.15, Point(0, 0, 0), Point(2, 1, 1))
 
 def test_point_at(): 
+	gu.
 	baxter_point_at(bowl_pos5)
 
 def test_point_emphatically(): 
@@ -34,6 +35,11 @@ def test_get_joint_angles():
 def test_move_to_neutral(): 
 	move_to_neutral()
 
+def mirror_joint()
+	joint = 
+	gesture_utils.
+
+
 
 
 
@@ -46,8 +52,11 @@ def main():
 			'joint_angles' : test_get_joint_angles, 
 			'neutral': test_move_to_neutral,
 			}
-	tests[sys.argv[1]]()
-
+	if len(sys.argv) == 2 and sys.argv[1] in tests: 
+		tests[sys.argv[1]]()
+	else: 
+		print "invalid key"
+		print tests.keys()
 
 
 main()
