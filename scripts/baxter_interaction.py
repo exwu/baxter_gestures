@@ -54,8 +54,13 @@ class Point_Emph(Observation):
 	def execute(self): 
 		gu.baxter_point_emphatically_at_execute(self.joints_close, self.joints_far, self.limb)
 
-	
-
+def Do_Wait(): 
+	def __init__(self): 
+		pass
+	def prob_given_state(self, state): 
+		return 1
+	def execute(self):
+		pass
 
 class NaiveSweep(Observation): 
 	def __init__(self, targets): 
@@ -129,12 +134,10 @@ def main():
 		irange(min(xlist), max(xlist), interval), 
 		irange(min(ylist), max(ylist), interval), 
 		irange(min(zlist), max(zlist), interval)) ]
-	print actions[0]
-	print(len(actions))
 
 	def observation_generator(): 
 		while True: 
-			yield None
+			yield Do_Wait()
 
 	interaction_loop(robot_bf, human_bf, actions, observation_generator(), kl_divergence_heuristic)
 

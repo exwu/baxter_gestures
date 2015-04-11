@@ -167,6 +167,7 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 
 		# Decide which action is best
 		best_action = min(actions, key=lambda a: heuristic(robot_bf, human_bf, a))
+		best_action.execute()
 
 		print "chosen_action: " + str(best_action)
 

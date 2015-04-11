@@ -40,15 +40,16 @@ defaultlimb = None
 
 
 def default_limb():
-	if default_limb == None:
+	if defaultlimb == None:
 		return "right"
 	else: 
 		return defaultlimb
 
 
-def init(str_limbs): 
+def init(str_limbs, init_node=True): 
 	# Initializes the rosnode as well as the limbs specified in str_limbs, a list of strings
-	rospy.init_node("gestures") 
+	if init_node: 
+		rospy.init_node("baxter_gestures", anonymous=True) 
 	global limbs
 	limbs = {limb:baxter_interface.Limb(limb) for limb in str_limbs}
 	if len(str_limbs) == 1: 
@@ -73,7 +74,7 @@ def baxter_execute_joint_positions(positions,
 		positions = [positions]
 
 	for pos in positions: 
-		move_function(limb, pos)
+		move_function(limbs[limb], pos)
 		if separator: 
 			separator()
 	
@@ -86,7 +87,11 @@ def baxter_point_pos(p, limb=defaultlimb, min_distance=0.15):
 	point = find_point_at_distance(p, distance, curr_pose['position'])
 	orientation = get_orientation_to(point, p)
 	pose = make_pose(point, orientation)
-	joints = get_ik_sol(pose)
+	print("Pose, " , pose)
+	joints = get_ik_sol(pose, limb)
+	if not joints: 
+		raise Exception("IK failed")
+
 	return (pose, joints)
 
 
@@ -367,7 +372,7 @@ def align_to_vector(v):
 def get_orientation_to(src, dest): 
 	#  Get an aligned on a vector from source to destination
 
-	return align_to_vector(normalize([dest.z - src.x, dest.y - src.y, dest.z - src.z]))
+	return align_to_vector(normalize([dest.x - src.x, dest.y - src.y, dest.z - src.z]))
 
 
 # BAzTER UTIL
@@ -537,10 +542,12 @@ def joint_mirror(joints):
 	new_joints = {}
 	for k, v in joints.iteritems():
 		k = k.replace(old, new)
-		if k[-2] in {'s0', 'e0', 'w0', 'w2'}:
+		if k[-2:] in {'s0', 'e0', 'w0', 'w2'}:
 			new_joints[k] = -v
 		else:
 			new_joints[k] = v
+	return new_joints
+
 
 def baxter_forearm_vector(pose=None, limb=defaultlimb): 
 	if not limb: 
