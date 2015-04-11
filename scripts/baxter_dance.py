@@ -3,6 +3,7 @@ import baxter_interface
 import baxter_interface.settings
 import rospy
 import gesture_utils
+import sys
 
 rospy.init_node("baxter_dance")
 
@@ -105,10 +106,13 @@ def move_arms(left_pos, right_pos):
 
 
 def main(): 
+	if len(sys.argv) != 2: 
+		print("usage: baxter_dance.py <number_of_waves>")
+		return 
 	speed = 0.4
 	right_limb.set_joint_position_speed(speed)
 	left_limb.set_joint_position_speed(speed)
-	for i in xrange(10): 
+	for i in xrange(int(sys.argv[1])):
 		arms_left()
 		arms_right()
 	print "done"
