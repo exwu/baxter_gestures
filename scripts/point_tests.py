@@ -52,7 +52,7 @@ def test_get_joint_angles():
 	print gu.get_joint_angles('right')
 
 def test_move_to_neutral(): 
-	gu.move_to_neutral()
+	gu.move_to_neutral('left')
 
 def mirror_joint():
 	joints = gu.get_joint_angles(limb='left')

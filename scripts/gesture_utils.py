@@ -258,6 +258,7 @@ def baxter_sweep_line(points, limb=defaultlimb):
 	baxter_point_downwards(p2p(point_on_line_closest(line, closest)))
 	limbs[limb].set_joint_position_speed(0.1)
 	baxter_point_downwards(p2p(point_on_line_closest(line, farthest)))
+	limbs[limb].set_joint_position_speed(0.6)
 
 
 def baxter_sweep_naive(points, limb=defaultlimb): 
