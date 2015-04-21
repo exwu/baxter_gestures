@@ -63,15 +63,15 @@ def init(str_limbs, init_node=True):
 
 
 def baxter_execute_joint_positions(positions, 
-		move_function=lambda limb, pos: limb.move_to_joint_positions(pos), 
+		move_function=None, 
 		separator=None, 
 		limb=defaultlimb): 
+	# positions must be a list of joint_angle dicts
 	if not limb: 
 		limb=default_limb()
+	if not move_function: 
+		move_function = lambda limb, pos: limb.move_to_joint_positions(pos) 
 
-	# positions is either a single joint_position dict or a list of them
-	if not isinstance(positions, collections.Iterable): 
-		positions = [positions]
 
 	for pos in positions: 
 		move_function(limbs[limb], pos)
@@ -87,7 +87,6 @@ def baxter_point_pos(p, limb=defaultlimb, min_distance=0.15):
 	point = find_point_at_distance(p, distance, curr_pose['position'])
 	orientation = get_orientation_to(point, p)
 	pose = make_pose(point, orientation)
-	print("Pose, " , pose)
 	joints = get_ik_sol(pose, limb)
 	if not joints: 
 		raise Exception("IK failed")
@@ -311,7 +310,6 @@ def angle_between(origin, p1, p2):
 	# and the two points
 	v1 = point_diff(origin, p1)
 	v2 = point_diff(origin, p2)
-	print(normalize(v1)* normalize(v2))
 	return math.acos(dot(v1, v2)/(magnitude(v1)* magnitude(v2)))
 
 def dot(v1, v2): 
@@ -435,6 +433,7 @@ def neutral_pose(limb=defaultlimb):
 	if not limb: 
 		limb=default_limb()
 
+	# funny looking natural pose, doesn't work well
 	neutral_pose_left = {
 			'left_w0': -1.0020,
 			'left_w1': 0.8214,
@@ -446,6 +445,8 @@ def neutral_pose(limb=defaultlimb):
 			}
 
 	neutral_pose_right = {'right_s0': -0.881655456829834, 'right_s1': -1.4116458184387208, 'right_w0': -0.03988350043945313, 'right_w1': 0.9303593467895508, 'right_w2': -1.60070895032959, 'right_e0': 0.3271214026428223, 'right_e1': 1.853815780041504}
+
+	neutral_pose_left = joint_mirror(neutral_pose_right)
 
 
 	neutral_pose = { 

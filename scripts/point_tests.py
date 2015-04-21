@@ -4,7 +4,7 @@ import sys
 import gesture_utils as gu
 from gesture_utils import Point
 
-gu.init(['right', 'left'])
+gu.init(['left'])
 
 
 # NOTES: 
@@ -20,6 +20,9 @@ bowl_pos5 = gu.Point(x=0.7403782842323192, y=-0.5016241130334161, z=-0.028004569
 bowl_pos6 = gu.Point(x=0.7683776614718456, y=-0.1784208449096021, z=0.046471016548638944)
 
 bowl_pos7 = gu.Point(x=0.6601031759244996, y=-0.7296362496398088, z=-0.020453668041184973)
+
+left_point = Point(x=0.6919457471320969, y=0.40650439874547234, z=-0.035975808883714155)
+
 
 
 points = [ 
@@ -37,10 +40,10 @@ def test_find_point():
 	print gu.find_point_at_distance(0.15, Point(0, 0, 0), Point(2, 1, 1))
 
 def test_point_at(): 
-	gu.baxter_point_at(points[2])
+	gu.baxter_point_at(left_point)
 
 def test_point_emphatically(): 
-	gu.baxter_point_emph_and_back(points[2])
+	gu.baxter_point_emph_and_back(left_point)
 
 def test_get_ee_pose(): 
 	print gu.get_ee_pose()

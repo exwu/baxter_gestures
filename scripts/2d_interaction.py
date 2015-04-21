@@ -18,20 +18,6 @@ class Human_State(State):
 		self.target = target
 		self.robot_distr = robot_distr
 
-class NilObj: 
-	def __init__(self, others): 
-		self.location = None
-		self.name = "Nil"
-		self.others = others
-
-	def __repr__(self): 
-		return "Nil"
-
-	def observation_function(self, obs, threshold=0.25):
-		observation_probs = [obs.observation_function(One_Obj_State(s)) for s in self.others]
-		if sum(observation_probs) < threshold: 
-			return 2*max(observation_probs)
-		return min(observation_probs)
 
 class Gesture_XY(Observation): 
 	def __init__(self, location): 

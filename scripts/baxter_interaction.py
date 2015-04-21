@@ -39,12 +39,15 @@ class Point(Observation):
 		self.limb = limb
 
 	def execute(self): 
-		gu.baxter_execute_joint_positions(self.joint_angles)
+		gu.baxter_execute_joint_positions([self.joint_angles], limb=self.limb)
 
 	def prob_given_state(self, state, variance=0.4): 
 		origin = gu.baxter_w1_position(self.ee_pose, self.limb)
 		sample = gu.angle_between(origin, self.ee_pose['position'], self.target)
 		return scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
+
+	def __repr__(self): 
+		return "Point at " + (str(self.target).replace('\n', ' '))
 
 class Point_Emph(Observation): 
 	def __init__(self, target, limb):
@@ -91,11 +94,11 @@ class MeldonBayesFilterWrapper(BayesFilter):
 #def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
 		
 points = [ 
-		gu.Point(x=0.6727, y=-0.7721, z=-0.0462), 
-		gu.Point(x=0.6794, y=-0.5903, z=-0.0466), 
-		gu.Point(x=0.5303, y=-0.4200, z=-0.0028), 
-		gu.Point(x=0.7631, y=-0.4258, z=-0.0616),
-		gu.Point(x=0.7772, y=-0.146, z=-0.063)
+		gu.Point(x=0.6727, y=0.7721, z=-0.0462), 
+		gu.Point(x=0.6794, y=0.5903, z=-0.0466), 
+		gu.Point(x=0.5303, y=0.4200, z=-0.0028), 
+		gu.Point(x=0.7631, y=0.4258, z=-0.0616),
+		gu.Point(x=0.7772, y=0.146, z=-0.063)
 		]
 
 #def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
@@ -104,8 +107,8 @@ def main():
 	#robot_bf = MeldonBayesFilterWrapper(title="Robot Belief", subplot_num=211) 
 
 
-	gu.init(['right'])
-	limb = 'right'
+	gu.init(['left'])
+	limb = 'left'
 
 
 	states = [One_Obj_State(Object("obj " + str(p.x), p)) for p in points]
@@ -115,7 +118,7 @@ def main():
 		lambda s, o: o.prob_given_state(s), 
 		Belief.make_uniform(states), 
 		title = "Robot Belief", 
-		subplot_num=212)
+		subplot_num=211)
 
 
 	human_bf = BayesFilter(states, 

@@ -15,8 +15,6 @@ class Observation:
 	# Observations are actions
 	pass
 
-
-
 class One_Obj_State(State):
 	def __init__(self, target): 
 		# target is an object
@@ -33,16 +31,30 @@ class One_Obj_State(State):
 	def __repr__(self): 
 		return str(self.target)
 	
+class NilObj: 
+	def __init__(self, others): 
+		self.location = None
+		self.name = "Nil"
+		self.others = others
+
+	def __repr__(self): 
+		return "Nil"
+
+	def observation_function(self, obs, threshold=0.25):
+		observation_probs = [obs.observation_function(One_Obj_State(s)) for s in self.others]
+		if sum(observation_probs) < threshold: 
+			return 2*max(observation_probs)
+		return min(observation_probs)
+
 class Belief: 
 	def __init__(self, states, values): 
 		self.states = states
 		self.dictionary = dict(zip(states, values))
+		self.probs = [self.dictionary[state] for state in self.states]
 	
 	def in_s(self, state): 
 		return self.dictionary[state]
 
-	def probs(self): 
-		return [self.dictionary[state] for state in self.states]
 
 	@staticmethod
 	def make_uniform(states): 
@@ -50,7 +62,7 @@ class Belief:
 
 
 	def entropy(self): 
-		return sum([ -1*p*math.log(p, 2) for p in self.probs() ])
+		return sum([ -1*p*math.log(p, 2) for p in self.probs ])
 
 	def __repr__(self): 
 		s = ""
@@ -114,7 +126,7 @@ class BayesFilter:
 		ax.set_xticklabels(self.states)
 		ax.set_ylim([0, 1.0])
 
-		bars = ax.bar(ind, self.belief.probs(), bar_width)
+		bars = ax.bar(ind, self.belief.probs, bar_width)
 		for bar in bars: 
 			height = bar.get_height()
 			ax.text(bar.get_x() + bar.get_width()/2, height + 0.03, 
@@ -147,7 +159,7 @@ def binned_distributions(states, resolution=0.2):
 def kl_divergence(P, Q): 
 	# KL divergence : the information lost when using Q to approximate P
 	# P and Q are both distriubutions/belief
-	return sum([p * math.log(p/q, 2) for p, q in zip(P.probs(), Q.probs())])
+	return sum([p * math.log(p/q, 2) for p, q in zip(P.probs, Q.probs)])
 
 def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
 	# robot_bf : a Bayes_Filter describing the robot's belief about which object the human wants
@@ -158,7 +170,6 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 	#				desirability of an action
 	plt.ion()
 	plt.show()
-	fig, ax = plt.subplots()
 	while True: 
 		# Robot observes and makes its update
 		obs = next(observation_generator)
