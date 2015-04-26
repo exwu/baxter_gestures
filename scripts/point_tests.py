@@ -4,7 +4,7 @@ import sys
 import gesture_utils as gu
 from gesture_utils import Point
 
-gu.init(['left'])
+gu.init(['right', 'left'])
 
 
 # NOTES: 
@@ -52,7 +52,7 @@ def test_get_joint_angles():
 	print gu.get_joint_angles('right')
 
 def test_move_to_neutral(): 
-	gu.move_to_neutral('left')
+	gu.move_to_neutral('right')
 
 def mirror_joint():
 	joints = gu.get_joint_angles(limb='left')

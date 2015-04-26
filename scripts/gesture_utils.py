@@ -78,13 +78,15 @@ def baxter_execute_joint_positions(positions,
 		if separator: 
 			separator()
 	
-def baxter_point_pos(p, limb=defaultlimb, min_distance=0.15): 
+def baxter_point_pos(p, start_pose=None, limb=defaultlimb, min_distance=0.15): 
 	# get the joint position for baxter's point pose
 	if not limb: 
 		limb=default_limb()
-	curr_pose = get_ee_pose(limb)
-	distance = min(min_distance, point_distance(curr_pose['position'], p))
-	point = find_point_at_distance(p, distance, curr_pose['position'])
+
+	if not start_pose: 
+		start_pose = get_ee_pose(limb)
+	distance = min(min_distance, point_distance(start_pose['position'], p))
+	point = find_point_at_distance(p, distance, start_pose['position'])
 	orientation = get_orientation_to(point, p)
 	pose = make_pose(point, orientation)
 	joints = get_ik_sol(pose, limb)
@@ -177,9 +179,9 @@ def baxter_point_at_and_back(p, limb=defaultlimb):
 	if not limb: 
 		limb=default_limb()
 
-	limbs[limb].move_to_joint_positions(neutral_pose())
+	limbs[limb].move_to_joint_positions(neutral_pose(limb)[0])
 	baxter_point_at(p, limb)
-	limbs[limb].move_to_joint_positions(neutral_pose())
+	limbs[limb].move_to_joint_positions(neutral_pose(limb)[0])
 
 def baxter_point_emph_and_back(p, limb=defaultlimb): 
 	if not limb: 
@@ -428,7 +430,7 @@ def baxter_move(positions, stop_condition=None, update=None, threshold=settings.
 def move_to_neutral(limb=defaultlimb): 
 	if not limb: 
 		limb=default_limb()
-	limbs[limb].move_to_joint_positions(neutral_pose(limb))
+	limbs[limb].move_to_joint_positions(neutral_pose(limb)[0])
 
 def neutral_pose(limb=defaultlimb): 
 	if not limb: 
@@ -445,13 +447,23 @@ def neutral_pose(limb=defaultlimb):
 			'left_s1': 0.0740
 			}
 
+	# back a bit
 	neutral_pose_right = {'right_s0': -0.881655456829834, 'right_s1': -1.4116458184387208, 'right_w0': -0.03988350043945313, 'right_w1': 0.9303593467895508, 'right_w2': -1.60070895032959, 'right_e0': 0.3271214026428223, 'right_e1': 1.853815780041504}
 
 	neutral_pose_left = joint_mirror(neutral_pose_right)
 
+	# hover left
+	neutral_pose_left = {'left_w0': 0.08858739039916992, 'left_w1': 1.2624661869873048, 'left_w2': -0.7600874795288086, 'left_e0': -0.14189322271728516, 'left_e1': 1.5274613677917481, 'left_s0': -0.26806314237670903, 'left_s1': -1.2367720088195802}
+
+	# hover right
+	neutral_pose_right = {'right_s0': 0.31101460438842776, 'right_s1': -1.2413739511779787, 'right_w0': -3.0250101102539064, 'right_w1': -1.0128108140441896, 'right_w2': 0.1817767231567383, 'right_e0': -0.0613592314453125, 'right_e1': 1.716141004486084}
+
+	neutral_pose_right_ee = {'position': Point(x=0.6096658953887413, y=-0.5457963761614156, z=0.2851768169892066), 'orientation': Quaternion(x=0.9257696561276956, y=-0.3721287063668252, z=0.05819073222325253, w=-0.03293339299682415)}
+
+
 
 	neutral_pose = { 
-			'right': neutral_pose_right, 
+			'right': (neutral_pose_right, neutral_pose_right_ee),
 			'left' : neutral_pose_left
 			}
 

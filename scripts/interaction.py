@@ -69,7 +69,7 @@ class Belief:
 		for key, value in self.dictionary.iteritems(): 
 			s += str(key)
 			s += " : " 
-			s += str(value)
+			s += str(round(value, 3))
 			s += "\n"
 		return s
 
