@@ -1,0 +1,11 @@
+kl divergence  avg difference 0.276791326309
+kl divergence  avg distance 0.704751458764
+entropy + kl  avg difference 0.376514383521
+entropy + kl  avg distance 0.937746887739
+entropy  avg difference 0.49965204502
+entropy  avg distance 1.57710939573
+random  avg difference 0.46116640089
+random  avg distance 1.3295396142
+avg difference 0.403531038935
+avg distance 1.13728683911
+

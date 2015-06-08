@@ -26,7 +26,7 @@ points3_left = [
 	]
 
 
-init(["left"]);
+init(["left", 'right']);
 
 def test_naive(): 
 	baxter_sweep_naive(points3_left)
@@ -55,6 +55,9 @@ def test_baxter_move():
 def test_move_to_neutral(): 
 	move_to_neutral()
 
+def test_forearm_vector(): 
+	print baxter_forearm_vector(limb='right')
+
 def main(): 
 	tests = {
 			'naive' : test_naive, 
@@ -64,7 +67,8 @@ def main():
 			'line' : test_sweep_line,
 			'neutral': test_move_to_neutral,
 			'record' : point_recorder,
-			'move' : test_baxter_move
+			'move' : test_baxter_move, 
+			'forearm' : test_forearm_vector
 			}
 	if len(sys.argv) == 2 and sys.argv[1] in tests: 
 		tests[sys.argv[1]]()

@@ -14,50 +14,69 @@ Human_State	2d_interaction.py	/^class Human_State(State):$/;"	c
 MeldonBayesFilterWrapper	baxter_interaction.py	/^class MeldonBayesFilterWrapper(BayesFilter): $/;"	c
 Multi_Obj_State	baxter_interaction.py	/^class Multi_Obj_State(State): $/;"	c
 NaiveSweep	baxter_interaction.py	/^class NaiveSweep(Observation): $/;"	c
-NilObj	2d_interaction.py	/^class NilObj: $/;"	c
+NilObj	interaction.py	/^class NilObj: $/;"	c
 Object	2d_interaction.py	/^class Object: $/;"	c
 Object	baxter_interaction.py	/^class Object:$/;"	c
 Observation	interaction.py	/^class Observation:$/;"	c
 One_Obj_State	baxter_interaction.py	/^class One_Obj_State(State): $/;"	c
 One_Obj_State	interaction.py	/^class One_Obj_State(State):$/;"	c
-Point	baxter_interaction.py	/^class Point(Observation): $/;"	c
+PointAction	evaluator.py	/^class PointAction: $/;"	c
 Point_Emph	baxter_interaction.py	/^class Point_Emph(Observation): $/;"	c
+Point_Gesture	baxter_interaction.py	/^class Point_Gesture(Observation): $/;"	c
 Robot_BF	2d_interaction.py	/^Robot_BF = BayesFilter(robot_states, $/;"	v
+Scenario	evaluator.py	/^class Scenario: $/;"	c
+Scenario	visualizer.py	/^class Scenario: $/;"	c
 State	interaction.py	/^class State: $/;"	c
+SweepAction	evaluator.py	/^class SweepAction: $/;"	c
+Visualizer	visualizer.py	/^class Visualizer: $/;"	c
 __Init__	baxter_interaction.py	/^	def __Init__(self, objects): $/;"	m	class:Multi_Obj_State	file:
+__eq__	evaluator.py	/^	def __eq__(self, other):$/;"	m	class:PointAction	file:
+__eq__	evaluator.py	/^	def __eq__(self, other):$/;"	m	class:SweepAction	file:
+__hash__	evaluator.py	/^	def __hash__(self): $/;"	m	class:PointAction	file:
+__hash__	evaluator.py	/^	def __hash__(self): $/;"	m	class:SweepAction	file:
 __init__	2d_interaction.py	/^	def __init__(self, location): $/;"	m	class:Gesture_XY
 __init__	2d_interaction.py	/^	def __init__(self, name, location): $/;"	m	class:Object
-__init__	2d_interaction.py	/^	def __init__(self, others): $/;"	m	class:NilObj
 __init__	2d_interaction.py	/^	def __init__(self, target, robot_distr): $/;"	m	class:Human_State
 __init__	baxter_interaction.py	/^	def __init__(self): $/;"	f	function:Do_Wait
 __init__	baxter_interaction.py	/^	def __init__(self, name, location): $/;"	m	class:Object
 __init__	baxter_interaction.py	/^	def __init__(self, obj): $/;"	m	class:One_Obj_State
-__init__	baxter_interaction.py	/^	def __init__(self, target, limb): $/;"	m	class:Point
+__init__	baxter_interaction.py	/^	def __init__(self, start_pose, target, limb): $/;"	m	class:Point_Gesture
+__init__	baxter_interaction.py	/^	def __init__(self, state_maker, title="Bayes Filter", subplot_num=None,) : $/;"	m	class:MeldonBayesFilterWrapper
 __init__	baxter_interaction.py	/^	def __init__(self, target, limb):$/;"	m	class:Point_Emph
 __init__	baxter_interaction.py	/^	def __init__(self, targets): $/;"	m	class:NaiveSweep
-__init__	baxter_interaction.py	/^	def __init__(self, title="Bayes Filter", subplot_num=None): $/;"	m	class:MeldonBayesFilterWrapper
+__init__	evaluator.py	/^	def __init__(self,  robot_belief, action=None):$/;"	m	class:Scenario
+__init__	evaluator.py	/^	def __init__(self, target): $/;"	m	class:PointAction
+__init__	evaluator.py	/^	def __init__(self, targets):$/;"	m	class:SweepAction
+__init__	interaction.py	/^	def __init__(self, others): $/;"	m	class:NilObj
 __init__	interaction.py	/^	def __init__(self, states, transition_f, observation_f, initial_belief, title="Bayes Filter", subplot_num=None): $/;"	m	class:BayesFilter
 __init__	interaction.py	/^	def __init__(self, states, values): $/;"	m	class:Belief
 __init__	interaction.py	/^	def __init__(self, target): $/;"	m	class:One_Obj_State
+__init__	visualizer.py	/^	def __init__(self,  robot_belief, action=None):$/;"	m	class:Scenario
+__init__	visualizer.py	/^	def __init__(self, scenarios): $/;"	m	class:Visualizer
 __repr__	2d_interaction.py	/^	def __repr__(self): $/;"	m	class:Gesture_XY	file:
-__repr__	2d_interaction.py	/^	def __repr__(self): $/;"	m	class:NilObj	file:
 __repr__	2d_interaction.py	/^	def __repr__(self): $/;"	m	class:Object	file:
 __repr__	baxter_interaction.py	/^	def __repr__(self): $/;"	m	class:Object	file:
 __repr__	baxter_interaction.py	/^	def __repr__(self): $/;"	m	class:One_Obj_State	file:
+__repr__	baxter_interaction.py	/^	def __repr__(self): $/;"	m	class:Point_Gesture	file:
+__repr__	evaluator.py	/^	def __repr__(self): $/;"	m	class:PointAction	file:
+__repr__	evaluator.py	/^	def __repr__(self): $/;"	m	class:Scenario	file:
+__repr__	evaluator.py	/^	def __repr__(self): $/;"	m	class:SweepAction	file:
 __repr__	interaction.py	/^	def __repr__(self): $/;"	m	class:BayesFilter	file:
 __repr__	interaction.py	/^	def __repr__(self): $/;"	m	class:Belief	file:
 __repr__	interaction.py	/^	def __repr__(self): $/;"	m	class:Gesture_None	file:
+__repr__	interaction.py	/^	def __repr__(self): $/;"	m	class:NilObj	file:
 __repr__	interaction.py	/^	def __repr__(self): $/;"	m	class:One_Obj_State	file:
+__repr__	visualizer.py	/^	def __repr__(self): $/;"	m	class:Scenario	file:
+action_generators	evaluator.py	/^def action_generators(max_length): $/;"	f
 actions	2d_interaction.py	/^actions = [Gesture_XY((x, y)) for x in irange(-2, 2, .4) for y in irange(-2, 2, .4)] + [Gesture_None()]$/;"	v
 actions	loop.py	/^actions = { 1 : lambda x: x, $/;"	v
+actions_list	evaluator.py	/^	def actions_list(x): $/;"	f	function:action_generators
 add_vec	meldon_gesture.py	/^def add_vec(v1,v2):$/;"	f
 advance	baxter_interaction.py	/^	def advance(self, belief, observation=None): $/;"	m	class:MeldonBayesFilterWrapper
 advance	interaction.py	/^	def advance(self, belief, observation=None): $/;"	m	class:BayesFilter
 align_to_vector	gesture_utils.py	/^def align_to_vector(v): $/;"	f
 angle_between	gesture_utils.py	/^def angle_between(origin, p1, p2):$/;"	f
 angle_between	meldon_gesture.py	/^def angle_between(origin, p1, p2):$/;"	f
-arms_left	baxter_dance.py	/^def arms_left(): $/;"	f
-arms_right	baxter_dance.py	/^def arms_right(): $/;"	f
 b_h	loop.py	/^    b_h = resulting_b_h$/;"	v
 b_h	loop.py	/^b_h = [1\/len(objects) for o in objects]$/;"	v
 b_r	loop.py	/^    b_r = bayes_filter_update(b_r, get_observation())$/;"	v
@@ -73,7 +92,7 @@ baxter_point_emph_and_back	gesture_utils.py	/^def baxter_point_emph_and_back(p, 
 baxter_point_emphatically_at	gesture_utils.py	/^def baxter_point_emphatically_at(point, limb=defaultlimb):$/;"	f
 baxter_point_emphatically_at_execute	gesture_utils.py	/^def baxter_point_emphatically_at_execute(joints_close, joints_far, limb=defaultlimb):$/;"	f
 baxter_point_emphatically_pos	gesture_utils.py	/^def baxter_point_emphatically_pos(point, limb=defaultlimb):$/;"	f
-baxter_point_pos	gesture_utils.py	/^def baxter_point_pos(p, limb=defaultlimb, min_distance=0.15): $/;"	f
+baxter_point_pos	gesture_utils.py	/^def baxter_point_pos(p, start_pose=None, limb=defaultlimb, min_distance=0.15): $/;"	f
 baxter_respond	meldon_gesture.py	/^def baxter_respond():$/;"	f
 baxter_sweep_less_naive	gesture_utils.py	/^def baxter_sweep_less_naive(points, limb=defaultlimb): $/;"	f
 baxter_sweep_line	gesture_utils.py	/^def baxter_sweep_line(points, limb=defaultlimb): $/;"	f
@@ -87,32 +106,44 @@ bowl_pos5	sweep_tests.py	/^bowl_pos5 = Point(x=0.7403782842323192, y=-0.50162411
 bowl_pos6	point_tests.py	/^bowl_pos6 = gu.Point(x=0.7683776614718456, y=-0.1784208449096021, z=0.046471016548638944)$/;"	v
 bowl_pos7	point_tests.py	/^bowl_pos7 = gu.Point(x=0.6601031759244996, y=-0.7296362496398088, z=-0.020453668041184973)$/;"	v
 candidate_b_hs	loop.py	/^    candidate_b_hs = [(action, bayes_filter_update(b_h, action)) for action in actions]$/;"	v
-clean_line	baxter_dance.py	/^def clean_line(line, names):$/;"	f
 closed_loop_velocity	gesture_utils.py	/^	def closed_loop_velocity(target, time): $/;"	f	function:move_to_velocity
 containers	meldon_gesture.py	/^containers = {"pink_bowl": "salt", "green_bowl": "pepper", "light_green_bowl": "vanilla", "yellow_bowl": "chocolate"}$/;"	v
+convert_to_domain_scale	evaluator.py	/^	def convert_to_domain_scale(number): $/;"	f	function:read_scenario_file
+ctds_tup	evaluator.py	/^	def ctds_tup(tup): $/;"	f	function:read_scenario_file
 default_limb	gesture_utils.py	/^def default_limb():$/;"	f
 defaultlimb	gesture_utils.py	/^defaultlimb = None$/;"	v
 dict_to_pose	gesture_utils.py	/^def dict_to_pose(dict_pose): $/;"	f
 dist	gesture_utils.py	/^	def dist(line, point): $/;"	f	function:best_fit_line
 dist	gesture_utils.py	/^	def dist(x1, y1, z1, x2, y2, z2): $/;"	f	function:find_point_at_distance
+dist_callback	baxter_interaction.py	/^	def dist_callback(self,data): $/;"	m	class:MeldonBayesFilterWrapper
+distance	evaluator.py	/^		def distance(p1, p2): $/;"	f	function:nil_fun_maker.nil_obs_fun
+distance	evaluator.py	/^def distance(t1, t2): $/;"	f
+domain_max	evaluator.py	/^domain_max = 1.0$/;"	v
+domain_min	evaluator.py	/^domain_min = -1.0$/;"	v
 dot	gesture_utils.py	/^def dot(v1, v2): $/;"	f
+draw_distribution	visualizer.py	/^	def draw_distribution(self): $/;"	m	class:Visualizer
+draw_points	visualizer.py	/^	def draw_points(self, point=None): $/;"	m	class:Visualizer
+entropy	evaluator.py	/^def entropy(probs): $/;"	f
 entropy	interaction.py	/^	def entropy(self): $/;"	m	class:Belief
 entropy_heuristic	interaction.py	/^entropy_heuristic = lambda rbf, hbf, a: hbf.advance(hbf.belief, a).entropy()$/;"	v
 eps	meldon_gesture.py	/^eps = 0.0001$/;"	v
+example1	evaluator.py	/^def example1(): $/;"	f
+example2	evaluator.py	/^def example2(): $/;"	f
+example3	evaluator.py	/^def example3(): $/;"	f
 execute	baxter_interaction.py	/^	def execute(self): $/;"	m	class:NaiveSweep
-execute	baxter_interaction.py	/^	def execute(self): $/;"	m	class:Point
 execute	baxter_interaction.py	/^	def execute(self): $/;"	m	class:Point_Emph
+execute	baxter_interaction.py	/^	def execute(self): $/;"	m	class:Point_Gesture
 execute	baxter_interaction.py	/^	def execute(self):$/;"	f	function:Do_Wait
 file_reader	meldon_gesture.py	/^def file_reader():$/;"	f
 fill_points	meldon_gesture.py	/^def fill_points(tfl):$/;"	f
 find_point_at_distance	gesture_utils.py	/^def find_point_at_distance(p, d, c):$/;"	f
-genf	baxter_dance.py	/^	def genf(limb, joint, angle): $/;"	f	function:move_arms
+gen	evaluator.py	/^			def gen():$/;"	f	function:action_generators.actions_list
 genf	gesture_utils.py	/^		def genf(joint, angle): $/;"	f	function:baxter_move
+get_annotated	visualizer.py	/^	def get_annotated(self): $/;"	m	class:Visualizer
 get_ee_pose	gesture_utils.py	/^def get_ee_pose(limb=defaultlimb): $/;"	f
 get_ik_sol	gesture_utils.py	/^def get_ik_sol(pose, limb=defaultlimb): $/;"	f
 get_joint_angles	gesture_utils.py	/^def get_joint_angles(limb=defaultlimb): $/;"	f
 get_orientation_to	gesture_utils.py	/^def get_orientation_to(src, dest): $/;"	f
-getstuff	baxter_dance.py	/^def getstuff(): $/;"	f
 ground_truth	meldon_gesture.py	/^ground_truth = "None"$/;"	v
 hamiltonian_product	gesture_utils.py	/^def hamiltonian_product(q1, q2): $/;"	f
 hardcoded_observations	2d_interaction.py	/^def hardcoded_observations(): $/;"	f
@@ -125,39 +156,39 @@ irange	interaction.py	/^def irange(low, high, interval): $/;"	f
 is_arm_null_gesture	meldon_gesture.py	/^def is_arm_null_gesture(arm_origin, arm_point):$/;"	f
 is_head_null_gesture	meldon_gesture.py	/^def is_head_null_gesture(origin, point):$/;"	f
 joint_delta	gesture_utils.py	/^	def joint_delta(joints1, joints2): $/;"	f	function:move_to_velocity
-joint_diff	baxter_dance.py	/^		def joint_diff(): $/;"	f	function:move_arms.genf
 joint_diff	gesture_utils.py	/^			def joint_diff(): $/;"	f	function:baxter_move.genf
 joint_distance	gesture_utils.py	/^	def joint_distance(joints1, joints2): $/;"	f	function:move_to_velocity
 joint_mirror	gesture_utils.py	/^def joint_mirror(joints): $/;"	f
 kl_divergence	interaction.py	/^def kl_divergence(P, Q): $/;"	f
 kl_divergence	loop.py	/^    kl_divergence = lambda P, Q: sum([p * math.log(p\/q, 2) for p, q in zip(P, Q)])$/;"	v
 kl_divergence_heuristic	interaction.py	/^kl_divergence_heuristic = lambda rbf, hbf, a: kl_divergence(hbf.advance(hbf.belief, a), rbf.belief)$/;"	v
-kl_entropy_divergence_heuristic	interaction.py	/^kl_entropy_divergence_heuristic = lambda rbf, hbf, a: kl_divergence_heuristic(rbf, hbf, a) + entropy_heuristic(rbf, hbf, a)$/;"	v
+kl_entropy_divergence_heuristic	interaction.py	/^kl_entropy_divergence_heuristic = lambda rbf, hbf, a: kl_divergence_heuristic(rbf, hbf, a) + 5* entropy_heuristic(rbf, hbf, a)$/;"	v
 last_obj	meldon_gesture.py	/^last_obj = "unknown"$/;"	v
-left_left	baxter_dance.py	/^left_left = {'left_w0': -0.22319420438232423, 'left_w1': 0.8130098166503906, 'left_w2': 0.43219908649291994, 'left_e0': 0.10852914061889649, 'left_e1': 0.6676651371643066, 'left_s0': 0.5840631843200684, 'left_s1': -1.12900985859375}$/;"	v
-left_left	baxter_dance.py	/^left_left = {'left_w0': -0.32635441225, 'left_w1': 0.567189395673, 'left_w2': 0.396534033215, 'left_e0': -0.0728640873413, 'left_e1': 0.0962572943298, 'left_s0': 0.662296204413, 'left_s1': -1.12977684899}$/;"	v
-left_limb	baxter_dance.py	/^left_limb = baxter_interface.Limb('left')$/;"	v
-left_right	baxter_dance.py	/^left_right = gesture_utils.joint_mirror(right_left)$/;"	v
+left_point	point_tests.py	/^left_point = Point(x=0.6919457471320969, y=0.40650439874547234, z=-0.035975808883714155)$/;"	v
 limbs	gesture_utils.py	/^limbs = None$/;"	v
 list_to_quaternion	gesture_utils.py	/^def list_to_quaternion(l): $/;"	f
 load_dict	meldon_gesture.py	/^def load_dict(filename):$/;"	f
 magnitude	gesture_utils.py	/^def magnitude(vec): $/;"	f
-main	baxter_dance.py	/^def main(): $/;"	f
 main	baxter_interaction.py	/^def main(): $/;"	f
+main	evaluator.py	/^def main(): $/;"	f
 main	meldon_gesture.py	/^def main():$/;"	f
 main	point_tests.py	/^def main(): $/;"	f
 main	sweep_tests.py	/^def main(): $/;"	f
+main	visualizer.py	/^def main(): $/;"	f
+make_bayes_filter	evaluator.py	/^def make_bayes_filter(scenario, use_uniform): $/;"	f
 make_distribution	interaction.py	/^	def make_distribution(add_to): $/;"	f	function:binned_distributions
 make_pose	gesture_utils.py	/^def make_pose(point, orientation): $/;"	f
 make_uniform	interaction.py	/^	def make_uniform(states): $/;"	m	class:Belief
 mirror_joint	point_tests.py	/^def mirror_joint():$/;"	f
 moveBack	gesture_utils.py	/^		def moveBack():$/;"	f	function:baxter_point_emphatically_at_execute.use_velocity
 moveForward	gesture_utils.py	/^		def moveForward(): $/;"	f	function:baxter_point_emphatically_at_execute.use_velocity
-move_arms	baxter_dance.py	/^def move_arms(left_pos, right_pos):$/;"	f
 move_to_neutral	gesture_utils.py	/^def move_to_neutral(limb=defaultlimb): $/;"	f
 move_to_velocity	gesture_utils.py	/^def move_to_velocity(time, target, limb=defaultlimb): $/;"	f
 neutral_pose	gesture_utils.py	/^def neutral_pose(limb=defaultlimb): $/;"	f
+nil_fun_maker	evaluator.py	/^def nil_fun_maker(states): $/;"	f
 nil_obj	2d_interaction.py	/^nil_obj = NilObj(list(objects))$/;"	v
+nil_obs_fun	evaluator.py	/^	def nil_obs_fun(obs): $/;"	f	function:nil_fun_maker
+nil_observation_f	evaluator.py	/^	def nil_observation_f(s, o): $/;"	f	function:make_bayes_filter
 norm	meldon_gesture.py	/^def norm(vec):$/;"	f
 normalize	gesture_utils.py	/^def normalize(v): $/;"	f
 normalize	meldon_gesture.py	/^def normalize(x): #for dictionary vectors$/;"	f
@@ -168,10 +199,15 @@ objects	loop.py	/^objects = [1, 2, 3, 4, 5]$/;"	v
 objects	meldon_gesture.py	/^objects = []$/;"	v
 objfunc	gesture_utils.py	/^	def objfunc(x, sign=1.0): $/;"	f	function:best_fit_line
 objfunc	gesture_utils.py	/^	def objfunc(x, sign=1.0): $/;"	f	function:find_point_at_distance
-observation_function	2d_interaction.py	/^	def observation_function(self, obs, threshold=0.25):$/;"	m	class:NilObj
+observation_f	evaluator.py	/^	def observation_f(s, o): $/;"	f	function:make_bayes_filter
 observation_function	2d_interaction.py	/^	def observation_function(self, state, covariance=[[1, 0], [0, 1]]): $/;"	m	class:Gesture_XY
+observation_function	evaluator.py	/^	def observation_function(self, state):  $/;"	m	class:SweepAction
+observation_function	evaluator.py	/^	def observation_function(self, state): $/;"	m	class:PointAction
+observation_function	interaction.py	/^	def observation_function(self, obs, threshold=0.25):$/;"	m	class:NilObj
 observation_function	interaction.py	/^	def observation_function(self, state): $/;"	m	class:Gesture_None
 observation_generator	baxter_interaction.py	/^	def observation_generator(): $/;"	f	function:main
+onclick	visualizer.py	/^	def onclick(self, event):$/;"	m	class:Visualizer
+one_obj_state_maker	baxter_interaction.py	/^	def one_obj_state_maker(name): $/;"	f	function:main
 p2p	gesture_utils.py	/^	def p2p(tup): $/;"	f	function:baxter_sweep_line
 past_bigrams	meldon_gesture.py	/^past_bigrams = {}$/;"	v
 past_trigrams	meldon_gesture.py	/^past_trigrams = {}$/;"	v
@@ -185,22 +221,23 @@ point_to_2d_tuple	gesture_utils.py	/^	def point_to_2d_tuple(p): $/;"	f	function:
 point_to_tup	gesture_utils.py	/^def point_to_tup(point): $/;"	f
 point_vec_add	gesture_utils.py	/^def point_vec_add(point, vector): $/;"	f
 points	baxter_interaction.py	/^points = [ $/;"	v
+points	baxter_interaction.py	/^points = [$/;"	v
 points	point_tests.py	/^points = [ $/;"	v
 points	sweep_tests.py	/^points = [ $/;"	v
 points2	sweep_tests.py	/^points2 = [$/;"	v
+points3_left	sweep_tests.py	/^points3_left = [$/;"	v
 prob_given_state	baxter_interaction.py	/^	def prob_given_state(self, state) : $/;"	m	class:NaiveSweep
 prob_given_state	baxter_interaction.py	/^	def prob_given_state(self, state): $/;"	f	function:Do_Wait
-prob_given_state	baxter_interaction.py	/^	def prob_given_state(self, state, variance=0.4): $/;"	m	class:Point
+prob_given_state	baxter_interaction.py	/^	def prob_given_state(self, state, variance=0.4): $/;"	m	class:Point_Gesture
 prob_of_sample	meldon_gesture.py	/^def prob_of_sample(sample):$/;"	f
-probs	interaction.py	/^	def probs(self): $/;"	m	class:Belief
 quaternion_to_list	gesture_utils.py	/^def quaternion_to_list(q): $/;"	f
 raw_input_observations	2d_interaction.py	/^def raw_input_observations(): $/;"	f
+read_points	visualizer.py	/^def read_points(filename): $/;"	f
+read_scenario_file	evaluator.py	/^def read_scenario_file(filename): $/;"	f
 recipe_list	meldon_gesture.py	/^recipe_list = []$/;"	v
-right_left	baxter_dance.py	/^right_left = {'left_w0': -0.3305728594116211, 'left_w1': 0.4701651109497071, 'left_w2': 0.40880587950439456, 'left_e0': -0.05599029869384766, 'left_e1': -0.050237870745849615, 'left_s0': 0.46939812055664065, 'left_s1': -1.4423254341613772}$/;"	v
-right_left	baxter_dance.py	/^right_left = {'left_w0': 0.5725583284240723, 'left_w1': 0.5832961939270019, 'left_w2': -3.029612052612305, 'left_e0': -2.7419906552124025, 'left_e1': 1.091043834136963, 'left_s0': 0.05330583231811524, 'left_s1': -0.7278738830200195}$/;"	v
-right_limb	baxter_dance.py	/^right_limb = baxter_interface.Limb('right')$/;"	v
-right_right	baxter_dance.py	/^right_right = gesture_utils.joint_mirror(left_left)$/;"	v
 robot_states	2d_interaction.py	/^robot_states = [One_Obj_State(obj) for obj in objects]$/;"	v
+run	visualizer.py	/^	def run(self): $/;"	m	class:Visualizer
+sample_uniformly	evaluator.py	/^def sample_uniformly(sample_size, generator): $/;"	f
 scnd_to_lat_obj	meldon_gesture.py	/^scnd_to_lat_obj = "unknown"$/;"	v
 smoothing_coefficient	meldon_gesture.py	/^smoothing_coefficient = 0$/;"	v
 speech	meldon_gesture.py	/^speech = []$/;"	v
@@ -211,6 +248,7 @@ state_r	loop.py	/^state_r = [1\/len(objects) for o in objects]$/;"	v
 storage	meldon_gesture.py	/^storage = None$/;"	v
 sub_vec	meldon_gesture.py	/^def sub_vec(v1,v2):$/;"	f
 t	meldon_gesture.py	/^t = 0.005$/;"	v
+test	baxter_interaction.py	/^def test(): $/;"	f
 test_baxter_move	sweep_tests.py	/^def test_baxter_move(): $/;"	f
 test_best_fit_line	sweep_tests.py	/^def test_best_fit_line(): $/;"	f
 test_find_point	point_tests.py	/^def test_find_point(): $/;"	f
@@ -223,14 +261,15 @@ test_naive	sweep_tests.py	/^def test_naive(): $/;"	f
 test_point_at	point_tests.py	/^def test_point_at(): $/;"	f
 test_point_down	sweep_tests.py	/^def test_point_down(): $/;"	f
 test_point_emphatically	point_tests.py	/^def test_point_emphatically(): $/;"	f
+test_scenario	evaluator.py	/^def test_scenario(scenario, actions, heuristic): $/;"	f
 test_sweep_line	sweep_tests.py	/^def test_sweep_line(): $/;"	f
+tests	unit_tests.py	/^def tests(): $/;"	f
 thing	point_tests.py	/^thing = Point(x=0.6638638350142058, y=-0.5640027544109408, z=-0.02337577227693624) $/;"	v
 transition_function	baxter_interaction.py	/^	def transition_function(self, s_next, object_switch_prob=0.1): $/;"	m	class:One_Obj_State
 transition_function	interaction.py	/^	def transition_function(self, s_next): $/;"	m	class:State
 transition_function	interaction.py	/^	def transition_function(self, s_next, object_switch_prob=0.1): $/;"	m	class:One_Obj_State
 trigram_counter	meldon_gesture.py	/^def trigram_counter(prev_ing, prev_ing2, mod):$/;"	f
 truth_callback	meldon_gesture.py	/^def truth_callback(input):$/;"	f
-try_float	baxter_dance.py	/^def try_float(x):$/;"	f
 tup_to_point	gesture_utils.py	/^def tup_to_point(tup): $/;"	f
 uni_counts	meldon_gesture.py	/^uni_counts = collections.Counter()$/;"	v
 unigram_counter	meldon_gesture.py	/^def unigram_counter(mod):$/;"	f
@@ -243,4 +282,5 @@ use_velocity	gesture_utils.py	/^	def use_velocity(): $/;"	f	function:baxter_poin
 variance	meldon_gesture.py	/^variance = 0.4$/;"	v
 weight	meldon_gesture.py	/^def weight(x, weight):$/;"	f
 write_output	meldon_gesture.py	/^def write_output():$/;"	f
+write_scenarios	visualizer.py	/^def write_scenarios(filename, scenarios): $/;"	f
 write_speech	meldon_gesture.py	/^write_speech = []$/;"	v

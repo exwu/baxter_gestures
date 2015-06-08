@@ -46,7 +46,7 @@ def test_point_emphatically():
 	gu.baxter_point_emph_and_back(left_point)
 
 def test_get_ee_pose(): 
-	print gu.get_ee_pose()
+	print gu.get_ee_pose('right')
 
 def test_get_joint_angles(): 
 	print gu.get_joint_angles('right')
@@ -58,6 +58,8 @@ def mirror_joint():
 	joints = gu.get_joint_angles(limb='left')
 	print gu.joint_mirror(joints)
 
+def test_forearm_vector(): 
+	print gu.baxter_forearm_vector(limb='right')
 
 def main(): 
 	tests = {'find_point' : test_find_point, 
@@ -67,6 +69,7 @@ def main():
 			'mirror_joint' : mirror_joint,
 			'joint_angles' : test_get_joint_angles, 
 			'neutral': test_move_to_neutral,
+			'forearm' : test_forearm_vector
 			}
 	if len(sys.argv) == 2 and sys.argv[1] in tests: 
 		tests[sys.argv[1]]()

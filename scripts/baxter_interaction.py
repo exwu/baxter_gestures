@@ -6,6 +6,7 @@ from gesture_utils import Point
 import sys
 import rospy
 from gesture_rec.msg import BayesFilterStateDist
+from object_recognition_msgs.msg import RecognizedObjectArray
 
 class Object:
 	def __init__(self, name, location): 
@@ -40,16 +41,17 @@ class Point_Gesture(Observation):
 		# target is a xyz location (point)
 		self.target = target
 		self.ee_pose, self.joint_angles = gu.baxter_point_pos(target, start_pose=start_pose, limb=limb)
+		#self.ee_pose, self.joint_angles = gu.baxter_point_downwards_sol(target, limb=limb, height=0.15)
 		self.limb = limb
 
 	def execute(self): 
 		gu.baxter_execute_joint_positions([self.joint_angles], limb=self.limb)
+		gu.move_to_neutral(limb=self.limb)
 
 	def prob_given_state(self, state, variance=0.4): 
 		origin = gu.baxter_w1_position(self.ee_pose, self.limb)
 		sample = gu.angle_between(origin, self.ee_pose['position'], state.obj.location)
 		r =  scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
-		print "prog_given", self, state, r, sample
 		return r
 
 	def __repr__(self): 
@@ -92,17 +94,29 @@ points = [
 		]
 
 class MeldonBayesFilterWrapper(BayesFilter): 
-	def __init__(self, state_maker, title="Bayes Filter", subplot_num=None,) : 
+	def __init__(self, states, objects_map, state_maker, title="Bayes Filter", subplot_num=None) : 
 		rospy.Subscriber('mm_bf_state', BayesFilterStateDist, self.dist_callback, queue_size=10)
-		self.belief = Belief.make_uniform([One_Obj_State(Object("obj " + str(p.x), p)) for p in points])
+		self.belief = Belief.make_uniform(states)
+		self.subplot_num = subplot_num
+		self.title = title
+		self.states = states
 		self.state_maker = state_maker
+		self.objects_map = objects_map
 
 	def dist_callback(self,data): 
-		states = [ self.state_maker(name) for name in data.names] 
-		probs = data.probs
-		self.belief = Belief(states, probs)
+		#states = [ self.state_maker(name) for name in data.names if name in self.objects_map ] 
+		#print 'callback', data.names
+		states = []
+		probs = []
+		for i, name in enumerate(data.names): 
+			if name in self.objects_map:
+				states.append(self.state_maker(name))
+				probs.append(data.probs[i])
 
-	def update(self, belief, observation=None): 
+		self.belief = Belief(states, probs)
+		self.states = states
+
+	def update(self, observation=None): 
 		return self.belief
 
 	def advance(self, belief, observation=None): 
@@ -112,7 +126,7 @@ class MeldonBayesFilterWrapper(BayesFilter):
 #def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
 		
 points = [ 
-		gu.Point(x=0.6727, y=0.7721, z=-0.0462), 
+		gu.Point(x=0.6727, y=0.7721, z=-0.0462), #{{{
 		gu.Point(x=0.6794, y=0.5903, z=-0.0466), 
 		gu.Point(x=0.5303, y=0.4200, z=-0.0028), 
 		gu.Point(x=0.7631, y=0.4258, z=-0.0616),
@@ -131,38 +145,68 @@ points = [
 		 Point(x=0.4126024589979365, y=-0.6430370954167054, z=-0.054708151919178216),
 		 Point(x=0.47190055611854664, y=-0.39567639471296134, z=-0.03762194048569241), 
 		 Point(x=0.7128883274797874, y=-0.4259662521599078, z=-0.04938158447524294),
-		 ]
+		 ]#}}}
+
+
+class ObjectsSubscriber(): 
+	# does not support objects moving, for now. 
+	# just on the left hand for now
+
+	def __init__(self): 
+		rospy.Subscriber('ein_right/blue_memory_objects', RecognizedObjectArray, self.callback, queue_size = 10)
+		self.objects = {}
+
+	def callback(self, data): 
+		self.objects = {}
+		for o in data.objects:
+			pos = o.pose.pose.pose.position  # point
+			name = o.type.key
+			self.objects[name] = Object(name, pos)
+
+
+	def getObjects(self): 
+		# return a map from 'name' to 'object'
+		# something else should make it to states
+		while not self.objects: 
+			rospy.sleep(2.)
+			print "waiting for objects"
+			pass
+		return self.objects
 
 
 def test(): 
-	gu.init(['left'])
-	origin = gu.Point(0, 0, 0)
-	while True: 
-		rospy.Rate(30).sleep()
+	rospy.init_node('thing')
+	o = ObjectsSubscriber()
+	while not rospy.is_shutdown(): 
+		print o.getObjects()
+		rospy.Rate(20).sleep()
 
 
-#def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
-#	def __init__(self, states, transition_f, observation_f, initial_belief, title="Bayes Filter", subplot_num=None): 
+
 def main(): 
-	#robot_bf = MeldonBayesFilterWrapper(title="Robot Belief", subplot_num=211) 
-
 
 	limb = 'right'
 	gu.init([limb])
 	start_joints, start_pose = gu.neutral_pose(limb=limb)
+	o = ObjectsSubscriber()
+	objects_map = o.getObjects()
 
-	def one_obj_state_maker(name): 
-		return One_Obj_State(Object(name, origin))
-	meldon = MeldonBayesFilterWrapper(one_obj_state_maker)
 
-	states = [One_Obj_State(Object("obj " + str(p.x), p)) for p in points]
+	states = [One_Obj_State(obj) for obj in objects_map.values() ]
+	print states
 
-	robot_bf = BayesFilter(states, 
-		lambda s, s_p: s.transition_function(s_p), 
-		lambda s, o: o.prob_given_state(s), 
-		Belief.make_uniform(states), 
-		title = "Robot Belief", 
-		subplot_num=211)
+	state_maker = lambda name: One_Obj_State(objects_map[name])
+
+	meldon = MeldonBayesFilterWrapper(states, objects_map, state_maker, subplot_num=211)
+
+	#states = [One_Obj_State(Object("obj " + str(p.x), p)) for p in points]
+
+	#robot_bf = BayesFilter(states, 
+	#	lambda s, s_p: s.transition_function(s_p), 
+	#	lambda s, o: o.prob_given_state(s), 
+	#	Belief.make_uniform(states), 
+	#	title = "Robot Belief", 
+	#	subplot_num=211)
 
 
 	human_bf = BayesFilter(states, 
@@ -176,7 +220,7 @@ def main():
 	xlist = [s.obj.location.x for s in states]
 	ylist = [s.obj.location.y for s in states]
 	zlist = [s.obj.location.z for s in states]
-	interval = 0.10
+	interval = 0.1
 
 	actions = []
 	for x in irange(min(xlist), max(xlist), interval):
@@ -192,10 +236,10 @@ def main():
 
 	print len(actions)
 
-	observations = [Point_Gesture(start_pose, p, limb) for p in points]
+	#observations = [Point_Gesture(start_pose, p, limb) for p in points]
 
 
-	def observation_generator(): 
+	def input_observation_generator(): 
 		last = 0
 		while True: 
 			p = raw_input()
@@ -205,8 +249,12 @@ def main():
 				p = int(p)
 			yield observations[p]
 
+	def none_generator(): 
+		while True: 
+			yield None 
 
-	interaction_loop(robot_bf, human_bf, actions, observation_generator(), kl_divergence_heuristic)
 
+	interaction_loop(meldon, human_bf, actions, none_generator(), kl_divergence_heuristic)
 
-main()
+if __name__ == "__main__":
+	main()

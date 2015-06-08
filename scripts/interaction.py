@@ -5,6 +5,9 @@ import scipy.stats
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import rospy
+
+THRESHOLD = 0.1
 
 
 class State: 
@@ -50,7 +53,8 @@ class Belief:
 	def __init__(self, states, values): 
 		self.states = states
 		self.dictionary = dict(zip(states, values))
-		self.probs = [self.dictionary[state] for state in self.states]
+		probs = [self.dictionary[state] for state in self.states]
+		self.probs = [ prob/sum(probs) for prob in probs]
 	
 	def in_s(self, state): 
 		return self.dictionary[state]
@@ -134,6 +138,7 @@ class BayesFilter:
 
 
 		plt.draw()
+		rospy.sleep(0.5)
 
 
 
@@ -178,9 +183,13 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 
 		# Decide which action is best
 		best_action = min(actions, key=lambda a: heuristic(robot_bf, human_bf, a))
-		best_action.execute()
 
 		print "chosen_action: " + str(best_action)
+		print "current score:", kl_divergence(robot_bf.belief, human_bf.belief) 
+
+		if kl_divergence(robot_bf.belief, human_bf.belief) > THRESHOLD: 
+			print 'executing'
+			best_action.execute()
 
 		# update our estimate on the human's action
 		human_bf.update(best_action)
@@ -189,7 +198,7 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 		human_bf.plot()
 
 def irange(low, high, interval): 
-	assert low < high
+	assert low <= high
 	nums = round((high - low)/interval)
 	return [ round(low + (x * interval), 4) for x in range(int(nums) + 1) ] 
 
@@ -200,4 +209,4 @@ kl_divergence_heuristic = lambda rbf, hbf, a: kl_divergence(hbf.advance(hbf.beli
 # how certain the human is. This is just telling them what they want, doesn't actually have anything to do with what the robot thinks...
 entropy_heuristic = lambda rbf, hbf, a: hbf.advance(hbf.belief, a).entropy()
 
-kl_entropy_divergence_heuristic = lambda rbf, hbf, a: kl_divergence_heuristic(rbf, hbf, a) + entropy_heuristic(rbf, hbf, a)
+kl_entropy_divergence_heuristic = lambda rbf, hbf, a: kl_divergence_heuristic(rbf, hbf, a) + 5* entropy_heuristic(rbf, hbf, a)

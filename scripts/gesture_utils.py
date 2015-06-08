@@ -197,6 +197,20 @@ def baxter_point_emph_and_back(p, limb=defaultlimb):
 # SWEEP FUNCTIONS
 #===========================================================================
 
+def baxter_point_downwards_sol(point, limb=defaultlimb, height=0.15): 
+	# point directly downward at the point
+	if not limb: 
+		limb=default_limb()
+
+	position = Point(point.x, point.y, point.z + height)
+	#orientation = align_to_vector([0, 0, -1]) 		# solution is degenerate
+	orientation = Quaternion(0.5, 1, 0, 0)
+
+	sol = get_ik_sol(make_pose(position, orientation), limb)
+	if sol == None: 
+		raise Exception("ik failed")
+
+	return(make_pose(position, orientation), sol )
 
 def baxter_point_downwards(point, limb=defaultlimb, height=0.15,): 
 	# point directly downward at the point
@@ -376,7 +390,7 @@ def get_orientation_to(src, dest):
 	return align_to_vector(normalize([dest.x - src.x, dest.y - src.y, dest.z - src.z]))
 
 
-# BAzTER UTIL
+# BAXTER UTIL
 
 def get_ee_pose(limb=defaultlimb): 
 	if not limb: 
@@ -569,6 +583,7 @@ def baxter_forearm_vector(pose=None, limb=defaultlimb):
 	if not pose: 
 		pose=get_ee_pose(limb)
 
+
 	o = [0, 0, 1, 0]
 	q = pose['orientation']
 	q_conj = [-1*q.x, -1*q.y, -1*q.z, q.w]
@@ -616,4 +631,7 @@ def quaternion_to_list(q):
 	return [q.x, q.y, q.z, q.w]
 
 def list_to_quaternion(l): 
-	return Quaternion(l[0], l[1], l[2], l[3])
+	q = Quaternion(l[0], l[1], l[2], l[3])
+	if q.x != l[0]: 
+		raise Exception("fuck")
+	return q
