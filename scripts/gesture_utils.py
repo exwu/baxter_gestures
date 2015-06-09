@@ -96,7 +96,7 @@ def baxter_point_pos(p, start_pose=None, limb=defaultlimb, min_distance=0.15):
 	return (pose, joints)
 
 
-def baxter_point_emphatically_pos(point, limb=defaultlimb):
+def baxter_point_emphatically_pos(point, start_pose=None, limb=defaultlimb):
 	# get the joint positions for baxter's emphatically pointing positions
 	# [close, far]
 
@@ -106,9 +106,10 @@ def baxter_point_emphatically_pos(point, limb=defaultlimb):
 	animation_distance = 0.15 
 
 	# get normal point position
-	curr_pose = get_ee_pose(limb)
-	distance = min(0.15, point_distance(curr_pose['position'], point))
-	point_close = find_point_at_distance(point, distance, curr_pose['position'])
+	if not start_pose: 
+		start_pose = get_ee_pose(limb)
+	distance = min(0.15, point_distance(start_pose['position'], point))
+	point_close = find_point_at_distance(point, distance, start_pose['position'])
 	orientation = get_orientation_to(point_close, point)
 
 	# get emphasis point position

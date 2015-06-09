@@ -187,7 +187,7 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 		print "chosen_action: " + str(best_action)
 		print "current score:", kl_divergence(robot_bf.belief, human_bf.belief) 
 
-		if kl_divergence(robot_bf.belief, human_bf.belief) > THRESHOLD: 
+		if True or kl_divergence(robot_bf.belief, human_bf.belief) > THRESHOLD: 
 			print 'executing'
 			best_action.execute()
 

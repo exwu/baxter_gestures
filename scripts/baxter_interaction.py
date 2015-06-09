@@ -7,6 +7,7 @@ import sys
 import rospy
 from gesture_rec.msg import BayesFilterStateDist
 from object_recognition_msgs.msg import RecognizedObjectArray
+from scipy.stats import multivariate_normal
 
 class Object:
 	def __init__(self, name, location): 
@@ -44,26 +45,54 @@ class Point_Gesture(Observation):
 		#self.ee_pose, self.joint_angles = gu.baxter_point_downwards_sol(target, limb=limb, height=0.15)
 		self.limb = limb
 
+
 	def execute(self): 
 		gu.baxter_execute_joint_positions([self.joint_angles], limb=self.limb)
 		gu.move_to_neutral(limb=self.limb)
 
-	def prob_given_state(self, state, variance=0.4): 
-		origin = gu.baxter_w1_position(self.ee_pose, self.limb)
-		sample = gu.angle_between(origin, self.ee_pose['position'], state.obj.location)
-		r =  scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
+	def prob_given_state(self, state, variance=0.05): 
+		#origin = gu.baxter_w1_position(self.ee_pose, self.limb)
+		#sample = gu.angle_between(origin, self.ee_pose['position'], state.obj.location)
+                cov = [ [variance, 0], [0, variance]]
+                mvn = multivariate_normal([self.target.x, self.target.y], cov)
+		#r =  scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
+                p = state.obj.location
+                r = mvn.pdf([p.x, p.y])
 		return r
 
 	def __repr__(self): 
 		return "Point at " + (str(self.target).replace('\n', ' '))
 
+def near(x, n): 
+    math.fabs(x - n) < 0.25
+
+
 class Point_Emph(Observation): 
-	def __init__(self, target, limb):
+	def __init__(self, start_pose, target, limb):
 		self.target = target
+                if near(self.target.x, 0.73) or near(self.target.y, -0.29): 
+                    print("near wooden bowl")
 		self.limb = limb
+                self.joints_close, self.joints_far = gu.baxter_point_emphatically_pos(target, start_pose, limb)
 
 	def execute(self): 
 		gu.baxter_point_emphatically_at_execute(self.joints_close, self.joints_far, self.limb)
+
+	def prob_given_state(self, state, variance=0.05): 
+                cov = [ [variance, 0], [0, variance]]
+                mvn = multivariate_normal([self.target.x, self.target.y], cov)
+		#r =  scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
+                p = state.obj.location
+                r = mvn.pdf([p.x, p.y])
+
+                if near(self.target.x, 0.73) or near(self.target.y, -0.29): 
+                    print("near wooden bowl")
+                    print(r)
+
+		return r
+
+	def __repr__(self): 
+		return "Point emph at " + (str(self.target).replace('\n', ' '))
 
 def Do_Wait(): 
 	def __init__(self): 
@@ -219,22 +248,27 @@ def main():
 
 	xlist = [s.obj.location.x for s in states]
 	ylist = [s.obj.location.y for s in states]
-	zlist = [s.obj.location.z for s in states]
-	interval = 0.1
+	#zlist = [s.obj.location.z for s in states]
+	interval = 0.05
 
 	actions = []
-	for x in irange(min(xlist), max(xlist), interval):
-		for y in irange(min(ylist), max(ylist), interval):
-			for z in irange(min(zlist), max(zlist), interval):
+	for x in irange(min(xlist)-0.10, max(xlist)+0.1, interval):
+		for y in irange(min(ylist)-0.10, max(ylist)+0.1, interval):
+	#		for z in irange(min(zlist)-0.10, max(zlist)+0.1, interval):
 				try:
-					actions.append(Point_Gesture(start_pose, gu.tup_to_point((x, y, z)), limb))
+					actions.append(Point_Emph(start_pose, gu.tup_to_point((x, y, 0)), limb))
 				except Exception:
 					print "failed to make gesture" 
-					print x, y, z
+					print x, y, 0
 					
+        actions2 = [Point_Emph(start_pose, obj.location, limb) for obj in objects_map.values() ]
+
+        actions.extend(actions2)
+        actions = actions2
 
 
-	print len(actions)
+	print actions
+        raw_input()
 
 	#observations = [Point_Gesture(start_pose, p, limb) for p in points]
 
