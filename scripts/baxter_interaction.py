@@ -18,6 +18,12 @@ class Object:
 	def __repr__(self): 
 		return "Obj(" + self.name + " : " + str(self.location) +  ")"
 
+	def __eq__(self, other): 
+		return self.name == other.name and self.location == other.location
+
+	def __hash__(self): 
+		return self.__repr__().__hash__()
+
 class One_Obj_State(State): 
 	def __init__(self, obj): 
 		self.obj = obj
@@ -32,6 +38,12 @@ class One_Obj_State(State):
 	
 	def __repr__(self): 
 		return str(self.obj)
+
+	def __eq__(self, other): 
+		return self.obj == other.obj
+
+	def __hash__(self): 
+		return self.__repr__().__hash__()
 	
 class Multi_Obj_State(State): 
 	def __Init__(self, objects): 
@@ -51,11 +63,8 @@ class Point_Gesture(Observation):
 		gu.move_to_neutral(limb=self.limb)
 
 	def prob_given_state(self, state, variance=0.05): 
-		#origin = gu.baxter_w1_position(self.ee_pose, self.limb)
-		#sample = gu.angle_between(origin, self.ee_pose['position'], state.obj.location)
                 cov = [ [variance, 0], [0, variance]]
                 mvn = multivariate_normal([self.target.x, self.target.y], cov)
-		#r =  scipy.stats.norm(0.0, math.sqrt(variance)).pdf(sample)
                 p = state.obj.location
                 r = mvn.pdf([p.x, p.y])
 		return r
@@ -63,15 +72,11 @@ class Point_Gesture(Observation):
 	def __repr__(self): 
 		return "Point at " + (str(self.target).replace('\n', ' '))
 
-def near(x, n): 
-    math.fabs(x - n) < 0.25
 
 
 class Point_Emph(Observation): 
 	def __init__(self, start_pose, target, limb):
 		self.target = target
-                if near(self.target.x, 0.73) or near(self.target.y, -0.29): 
-                    print("near wooden bowl")
 		self.limb = limb
                 self.joints_close, self.joints_far = gu.baxter_point_emphatically_pos(target, start_pose, limb)
 
@@ -85,9 +90,6 @@ class Point_Emph(Observation):
                 p = state.obj.location
                 r = mvn.pdf([p.x, p.y])
 
-                if near(self.target.x, 0.73) or near(self.target.y, -0.29): 
-                    print("near wooden bowl")
-                    print(r)
 
 		return r
 
@@ -256,15 +258,15 @@ def main():
 		for y in irange(min(ylist)-0.10, max(ylist)+0.1, interval):
 	#		for z in irange(min(zlist)-0.10, max(zlist)+0.1, interval):
 				try:
-					actions.append(Point_Emph(start_pose, gu.tup_to_point((x, y, 0)), limb))
+					actions.append(Point_Gesture(start_pose, gu.tup_to_point((x, y, 0)), limb))
 				except Exception:
 					print "failed to make gesture" 
 					print x, y, 0
 					
-        actions2 = [Point_Emph(start_pose, obj.location, limb) for obj in objects_map.values() ]
+        actions2 = [Point_Gesture(start_pose, obj.location, limb) for obj in objects_map.values() ]
 
         actions.extend(actions2)
-        actions = actions2
+        #actions = actions2
 
 
 	print actions

@@ -530,9 +530,11 @@ def move_to_velocity(time, target, limb=defaultlimb):
 				delta = joints2[joint] - joints1[joint]
 				if delta > math.pi : 
 					# pick the shorter of the directions to move
-					print("changing delta")
+					#print("changing delta")
 					delta = delta - (2 * math.pi)
-				joints_d[joint] = delta
+                                if delta < math.pi * -1: 
+                                    delta = delta + 2 * math.pi
+                                joints_d[joint] = delta
 			return joints_d
 
 	def joint_distance(joints1, joints2): 
@@ -548,7 +550,7 @@ def move_to_velocity(time, target, limb=defaultlimb):
 		# calculate velocity according to a target and a time
 		if time <= 0: 
 			print("resetting time")
-			time = 1.00
+			time = 0.50
 		joints_d = joint_delta(limbs[limb].joint_angles(), target)
 		joints_d = {k : (v / time) for k, v in joints_d.items()}
 		return joints_d

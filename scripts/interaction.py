@@ -33,6 +33,7 @@ class One_Obj_State(State):
 	
 	def __repr__(self): 
 		return str(self.target)
+
 	
 class NilObj: 
 	def __init__(self, others): 
@@ -164,7 +165,8 @@ def binned_distributions(states, resolution=0.2):
 def kl_divergence(P, Q): 
 	# KL divergence : the information lost when using Q to approximate P
 	# P and Q are both distriubutions/belief
-	return sum([p * math.log(p/q, 2) for p, q in zip(P.probs, Q.probs)])
+
+	return sum([P.in_s(s) * math.log(P.in_s(s)/Q.in_s(s), 2) for s in P.states])
 
 def interaction_loop(robot_bf, human_bf, actions, observation_generator, heuristic): 
 	# robot_bf : a Bayes_Filter describing the robot's belief about which object the human wants
@@ -184,12 +186,14 @@ def interaction_loop(robot_bf, human_bf, actions, observation_generator, heurist
 		# Decide which action is best
 		best_action = min(actions, key=lambda a: heuristic(robot_bf, human_bf, a))
 
-		print "chosen_action: " + str(best_action)
-		print "current score:", kl_divergence(robot_bf.belief, human_bf.belief) 
-
-		if True or kl_divergence(robot_bf.belief, human_bf.belief) > THRESHOLD: 
-			print 'executing'
+		if heuristic(robot_bf, human_bf, best_action) >= heuristic(robot_bf, human_bf, None): 
+			best_action = None
+		else: 
 			best_action.execute()
+
+		print "chosen_action: " + str(best_action)
+
+
 
 		# update our estimate on the human's action
 		human_bf.update(best_action)
